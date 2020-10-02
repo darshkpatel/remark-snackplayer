@@ -1,42 +1,45 @@
-'use strict';
-const hljs = require('highlight.js');
-const visit = require('unist-util-visit-parents');
-const u = require('unist-builder');
+"use strict";
+const hljs = require("highlight.js");
+const visit = require("unist-util-visit-parents");
+const u = require("unist-builder");
+const dedent = require("dedent");
 
 function parseParams(paramString) {
   var params = {};
 
   if (paramString) {
-    var pairs = paramString.split('&');
+    var pairs = paramString.split("&");
     for (var i = 0; i < pairs.length; i++) {
-      var pair = pairs[i].split('=');
+      var pair = pairs[i].split("=");
       params[pair[0]] = pair[1];
     }
   }
 
   if (!params.platform) {
-    params.platform = 'web';
+    params.platform = "web";
   }
 
   return params;
 }
 
 function htmlForCodeBlock(code) {
-  return (
-    '<pre><code class="hljs css javascript">' +
-    hljs.highlight('javascript', code).value +
-    '</code></pre>'
-  );
+  return `
+    <pre>
+      <code class="hljs css javascript">
+        ${hljs.highlight("javascript", code).value}
+      </code>
+    </pre>
+    `;
 }
 
 function SnackPlayer() {
-  return tree =>
+  return (tree) =>
     new Promise(async (resolve, reject) => {
       const nodesToProcess = [];
       // Parse all CodeBlocks
-      visit(tree, 'code', (node, parent) => {
+      visit(tree, "code", (node, parent) => {
         //Add SnackPlayer CodeBlocks to processing queue
-        if (node.lang == 'SnackPlayer') {
+        if (node.lang == "SnackPlayer") {
           nodesToProcess.push(
             new Promise(async (resolve, reject) => {
               try {
@@ -45,42 +48,38 @@ function SnackPlayer() {
                 // Gather necessary Params
                 const name = params.name
                   ? decodeURIComponent(params.name)
-                  : 'Example';
+                  : "Example";
                 const description = params.description
                   ? decodeURIComponent(params.description)
-                  : 'Example usage';
+                  : "Example usage";
                 const sampleCode = node.value;
                 const encodedSampleCode = encodeURIComponent(sampleCode);
-                const platform = params.platform ? params.platform : 'ios';
+                const platform = params.platform ? params.platform : "ios";
                 const supportedPlatforms = params.supportedPlatforms
                   ? params.supportedPlatforms
-                  : 'ios,android,web';
+                  : "ios,android,web";
 
                 // Generate Node for SnackPlayer
-                const snackPlayerDiv = u('html', {
-                  value: `<div class="snack-player">
-                              <div class="mobile-friendly-snack" style="display: none">
-                              ${htmlForCodeBlock(sampleCode)}</div>
-                              <div class="desktop-friendly-snack" style="margin-top: 15px; margin-bottom: 15px">
-                              <div
-                                data-snack-name="${name}"
-                                data-snack-description="${description}"
-                                data-snack-code="${encodedSampleCode}"
-                                data-snack-platform="${platform}"
-                                data-snack-supported-platforms="${supportedPlatforms}"
-                                data-snack-preview="true"
-                                style="
-                                  overflow: hidden;
-                                  background: #fafafa;
-                                  border: 1px solid rgba(0,0,0,.16);
-                                  border-radius: 4px;
-                                  height: 514px;
-                                  width: 100%;
-                                "
-                              >
-                              </div>
-                              </div>
-                              </div>`,
+                const snackPlayerDiv = u("html", {
+                  value: dedent`
+                <div class="snack-player">
+                  <div class="mobile-friendly-snack" style="display: none">
+                    ${htmlForCodeBlock(sampleCode)}
+                  </div>
+                  <div class="desktop-friendly-snack">
+                    <div
+                      data-snack-name="${name}"
+                      data-snack-description="${description}"
+                      data-snack-code="${encodedSampleCode}"
+                      data-snack-platform="${platform}"
+                      data-snack-supported-platforms="${supportedPlatforms}"
+                      data-snack-preview="true"
+                      style="overflow:hidden;background:#fafafa;border:1px solid rgba(0,0,0,.08);border-radius:4px;height:505px;width:100%"
+                      >
+                    </div>
+                  </div>
+                </div>
+                `,
                 });
 
                 // Replace code block with SnackPlayer Node
@@ -95,11 +94,31 @@ function SnackPlayer() {
         }
       });
 
+      // If there is one or more snackplayer(s) present
+      if (nodesToProcess.length) {
+        // To embed.js script
+        const snackPlayerEmbed = u("html", {
+          value: dedent`
+          <script async src="https://snack.expo.io/embed.js"></script>`,
+        });
+
+        // To only show snackplayer on desktop browsers
+        const viewCSS = u("html", {
+          value: dedent`
+          <style>
+          @media screen and (min-width: 0px) and (max-width: 960px) {
+            .mobile-friendly-snack { display: block !important; }  
+            .desktop-friendly-snack { display: none; } 
+           }
+          </style>`,
+        });
+
+        tree.children.push(snackPlayerEmbed);
+        tree.children.push(viewCSS);
+      }
       // Wait for all promises to be resolved
-      Promise.all(nodesToProcess)
-        .then(resolve())
-        .catch(reject());
+      Promise.all(nodesToProcess).then(resolve()).catch(reject());
     });
 }
 
-
+module.exports = SnackPlayer;
