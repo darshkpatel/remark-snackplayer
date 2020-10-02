@@ -1,6 +1,20 @@
 <h1 align="center"> Remark SnackPlayer </h1>
 
-Remark plugin to embed [Expo Snack's](https://snack.expo.io/) using Code Blocks
+<p align="center"> 
+Remark plugin to embed <a href="https://snack.expo.io/">Expo Snack's</a> using Code Blocks 
+</p>
+
+<p align="center">
+
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/darshkpatel/remark-snackplayer/Test,%20Publish,%20&%20Release?style=for-the-badge">
+  
+<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/remark-snackplayer?style=for-the-badge">
+
+<img alt="Libraries.io dependency status for latest release" src="https://img.shields.io/librariesio/release/npm/remark-snackplayer?style=for-the-badge">
+
+<img alt="npm" src="https://img.shields.io/npm/v/remark-snackplayer?style=for-the-badge">
+
+</p>
 
 <hr>
 
@@ -15,7 +29,6 @@ Remark plugin to embed [Expo Snack's](https://snack.expo.io/) using Code Blocks
     <img src="https://forthebadge.com/images/badges/made-with-javascript.svg"
          alt="Javascript">
   </a>
-  
 </p>
 
 ## Installing
@@ -57,7 +70,6 @@ The above code snippet would look like this on your page
 
 <img width="783" alt="Screenshot 2020-10-03 at 1 11 19 AM" src="https://user-images.githubusercontent.com/11258286/94963203-67de3500-0515-11eb-974a-a2289c0bfdc8.png">
 
-
 Parameters:
 
 | Name               | Description                | Default           |
@@ -69,9 +81,9 @@ Parameters:
 
 ## To Do
 
-* Support Passing Configuration Parameters
-* Fix and Document Mobile Fallback
-* Write Comprehensive tests
+- Support Passing Configuration Parameters
+- Fix and Document Mobile Fallback
+- Write Comprehensive tests
 
 ## License
 
