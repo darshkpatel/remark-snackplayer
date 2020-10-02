@@ -3,9 +3,24 @@
   "version": "0.0.1",
   "description": "Remark SnackPlayer Plugin",
   "main": "src/index.js",
-  "repository": "https://github.com/darshkpatel/docusaurus-snackplayer",
+  "repository": "https://github.com/darshkpatel/remark-snackplayer",
+  "homepage": "https://github.com/darshkpatel/remark-snackplayer",
   "author": "Darsh <darshkpatel@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "email": "darshkpatel@gmail.com",
+    "url": "https://github.com/darshkpatel"
+  },
+  "keywords": [
+    "remark",
+    "react-native",
+    "expo",
+    "snackplayer",
+    "preview"
+  ],
+  "files": [
+    "src"
+  ],
   "scripts": {
     "test": "node_modules/.bin/tape tests/index.js"
     },
