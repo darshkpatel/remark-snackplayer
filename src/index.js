@@ -102,6 +102,51 @@ function SnackPlayer() {
           value: dedent`
           <script async src="https://snack.expo.io/embed.js"></script>
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-solarized-dark@1.0.1/prism-solarizeddark.css">         
+          <script type="text/javascript">
+          // From: 
+          (function() {
+            'use strict';
+            if (typeof document === 'undefined') {
+              // Not on browser
+              return;
+            }
+            document.addEventListener('DOMContentLoaded', init);
+
+            function init() {
+              var mobile = isMobile();
+
+              window.ExpoSnack && window.ExpoSnack.initialize();
+
+              var snackPlayerList = document.querySelectorAll('.snack-player');
+
+              // Either show interactive or static code block, depending on desktop or mobile
+              for (var i = 0; i < snackPlayerList.length; ++i) {
+                var snackPlayer = snackPlayerList[i];
+                var snackDesktopPlayer = snackPlayer.querySelectorAll(
+                  '.desktop-friendly-snack'
+                )[0];
+                var plainCodeExample = snackPlayer.querySelectorAll(
+                  '.mobile-friendly-snack'
+                )[0];
+
+                if (mobile) {
+                  snackDesktopPlayer.remove();
+                  plainCodeExample.style.display = 'block';
+                } else {
+                  plainCodeExample.remove();
+                }
+              }
+            }
+            
+              // Primitive mobile detection
+              function isMobile() {
+                return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                  navigator.userAgent
+                );
+              }
+              
+          })();
+        </script>
           `,
           
         });
