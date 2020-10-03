@@ -1,8 +1,9 @@
 "use strict";
-const hljs = require("highlight.js");
 const visit = require("unist-util-visit-parents");
 const u = require("unist-builder");
 const dedent = require("dedent");
+const Prism = require('prismjs');
+require('prismjs/components/prism-jsx')
 
 function parseParams(paramString) {
   var params = {};
@@ -24,9 +25,9 @@ function parseParams(paramString) {
 
 function htmlForCodeBlock(code) {
   return `
-    <pre>
-      <code class="hljs css javascript">
-        ${hljs.highlight("javascript", code).value}
+    <pre class="language-jsx">
+      <code class="language-jsx">
+    ${Prism.highlight(code, Prism.languages.jsx, 'jsx')}
       </code>
     </pre>
     `;
@@ -64,7 +65,7 @@ function SnackPlayer() {
                   value: dedent`
                 <div class="snack-player">
                   <div class="mobile-friendly-snack" style="display: none">
-                    ${htmlForCodeBlock(sampleCode)}
+                    ${htmlForCodeBlock(dedent(sampleCode))}
                   </div>
                   <div class="desktop-friendly-snack">
                     <div
@@ -99,22 +100,13 @@ function SnackPlayer() {
         // To embed.js script
         const snackPlayerEmbed = u("html", {
           value: dedent`
-          <script async src="https://snack.expo.io/embed.js"></script>`,
-        });
-
-        // To only show snackplayer on desktop browsers
-        const viewCSS = u("html", {
-          value: dedent`
-          <style>
-          @media screen and (min-width: 0px) and (max-width: 960px) {
-            .mobile-friendly-snack { display: block !important; }  
-            .desktop-friendly-snack { display: none; } 
-           }
-          </style>`,
+          <script async src="https://snack.expo.io/embed.js"></script>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-solarized-dark@1.0.1/prism-solarizeddark.css">         
+          `,
+          
         });
 
         tree.children.push(snackPlayerEmbed);
-        tree.children.push(viewCSS);
       }
       // Wait for all promises to be resolved
       Promise.all(nodesToProcess).then(resolve()).catch(reject());
