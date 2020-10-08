@@ -1,6 +1,6 @@
 {
   "name": "remark-snackplayer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Remark SnackPlayer Plugin",
   "main": "src/index.js",
   "repository": "https://github.com/darshkpatel/remark-snackplayer",
