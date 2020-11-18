@@ -1,4 +1,4 @@
-# Note: This has been moved to [facebook/react-native-website](https://github.com/facebook/react-native-website/tree/master/website/plugins/remark-snackplayer)
+# Note: This has been moved to [facebook/react-native-website](https://github.com/facebook/react-native-website/tree/master/plugins/remark-snackplayer)
 ## This plugin was a part of efforts for migrating the React Native's website to Docusaurus v2
 
 <h1 align="center"> Remark SnackPlayer </h1>
